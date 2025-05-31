@@ -30,6 +30,7 @@ import { i18nMessagesType } from './i18nMessagesType'
 import { GetPopularStocksConfigType } from './GetPopularStocksConfigType'
 import { GetTransactionsOptionsType } from './GetTransactionsOptionsType'
 import { TransactionType } from './TransactionType'
+import { ProductDetailsType } from './ProductDetailsType'
 
 import {
   ConfigDictionaryType,
@@ -80,6 +81,7 @@ export {
   New,
   WebSettingsType,
   WebUserSettingType,
+  ProductDetailsType,
 
   ConfigDictionaryType,
   StockCountry,

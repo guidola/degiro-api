@@ -1,13 +1,13 @@
 import fetch, { RequestInit } from 'node-fetch';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
-import { AccountConfigType, AccountDataType } from '../types'
+import { AccountConfigType, AccountDataType, ProductDetailsType } from '../types'
 
 // Import debug console log
 import { debug } from '../utils'
 
 // tslint:disable-next-line: max-line-length
-export function getProductsByIdsRequest(ids: string[], accountData: AccountDataType, accountConfig: AccountConfigType): Promise<any[]> {
+export function getProductsByIdsRequest(ids: string[], accountData: AccountDataType, accountConfig: AccountConfigType): Promise<ProductDetailsType[]> {
   return new Promise((resolve, reject) => {
 
     const baseRequestOptions: RequestInit = {
@@ -30,7 +30,18 @@ export function getProductsByIdsRequest(ids: string[], accountData: AccountDataT
 
     fetch(`${accountConfig.data.productSearchUrl}v5/products/info?intAccount=${accountData.data.intAccount}&sessionId=${accountConfig.data.sessionId}`, finalRequestOptions)
       .then(res => res.json())
-      .then(res => resolve(res.data))
+      .then(res => {
+        // The response has a top-level 'data' object which contains product IDs as keys.
+        // We need to extract the values (product details) from this object.
+        if (res && res.data && typeof res.data === 'object') {
+          const productDetailsArray: ProductDetailsType[] = Object.values(res.data);
+          resolve(productDetailsArray);
+        } else {
+          // Handle cases where the response structure is not as expected
+          debug('Unexpected response structure from getProductsByIdsRequest:', res);
+          resolve([]); // Resolve with an empty array or reject, based on desired error handling
+        }
+      })
       .catch(reject)
   })
 }

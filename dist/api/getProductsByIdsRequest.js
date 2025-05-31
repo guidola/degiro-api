@@ -17,6 +17,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProductsByIdsRequest = void 0;
 var node_fetch_1 = __importDefault(require("node-fetch"));
 var https_proxy_agent_1 = require("https-proxy-agent");
+// Import debug console log
+var utils_1 = require("../utils");
 // tslint:disable-next-line: max-line-length
 function getProductsByIdsRequest(ids, accountData, accountConfig) {
     return new Promise(function (resolve, reject) {
@@ -37,7 +39,19 @@ function getProductsByIdsRequest(ids, accountData, accountConfig) {
         }
         (0, node_fetch_1.default)("".concat(accountConfig.data.productSearchUrl, "v5/products/info?intAccount=").concat(accountData.data.intAccount, "&sessionId=").concat(accountConfig.data.sessionId), finalRequestOptions)
             .then(function (res) { return res.json(); })
-            .then(function (res) { return resolve(res.data); })
+            .then(function (res) {
+            // The response has a top-level 'data' object which contains product IDs as keys.
+            // We need to extract the values (product details) from this object.
+            if (res && res.data && typeof res.data === 'object') {
+                var productDetailsArray = Object.values(res.data);
+                resolve(productDetailsArray);
+            }
+            else {
+                // Handle cases where the response structure is not as expected
+                (0, utils_1.debug)('Unexpected response structure from getProductsByIdsRequest:', res);
+                resolve([]); // Resolve with an empty array or reject, based on desired error handling
+            }
+        })
             .catch(reject);
     });
 }
