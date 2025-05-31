@@ -12,7 +12,7 @@ export function getTransactionsRequest(accountData: AccountDataType, accountConf
     let params = ''
     params += `fromDate=${encodeURIComponent(config.fromDate)}&`
     params += `toDate=${encodeURIComponent(config.toDate)}&`
-    params += `groupTransactionsByOrder` // Note: This was likely meant to be part of the params string construction
+    params += `groupTransactionsByOrder=${encodeURIComponent(config.groupTransactionsByOrder)}&` 
     params += `&intAccount=${accountData.data.intAccount}&` // Assuming '&' was intended before intAccount
     params += `sessionId=${accountConfig.data.sessionId}`
 

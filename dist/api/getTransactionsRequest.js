@@ -63,7 +63,7 @@ function getTransactionsRequest(accountData, accountConfig, config) {
         var params = '';
         params += "fromDate=".concat(encodeURIComponent(config.fromDate), "&");
         params += "toDate=".concat(encodeURIComponent(config.toDate), "&");
-        params += "groupTransactionsByOrder"; // Note: This was likely meant to be part of the params string construction
+        params += "groupTransactionsByOrder=".concat(encodeURIComponent(config.groupTransactionsByOrder), "&");
         params += "&intAccount=".concat(accountData.data.intAccount, "&"); // Assuming '&' was intended before intAccount
         params += "sessionId=".concat(accountConfig.data.sessionId);
         var baseRequestOptions = {
