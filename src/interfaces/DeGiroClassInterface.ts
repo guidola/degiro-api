@@ -24,6 +24,8 @@ import {
   ConfigDictionaryType,
   i18nMessagesType,
   GetPopularStocksConfigType,
+  GetTransactionsOptionsType,
+  TransactionType,
 } from '../types'
 
 /**
@@ -82,6 +84,8 @@ export interface DeGiroClassInterface {
   executeOrder(order: OrderType, executeId: string): Promise<String>
 
   deleteOrder(orderId: String): Promise<void>
+
+  getTransactions(options: GetTransactionsOptionsType): Promise<TransactionType[]>
 
   /* Miscellaneous methods */
 

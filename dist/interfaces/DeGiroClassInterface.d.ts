@@ -1,4 +1,4 @@
-import { CashFoundType, AccountConfigType, GetPorfolioConfigType, AccountDataType, SearchProductOptionsType, SearchProductResultType, OrderType, CreateOrderResultType, IsLoginOptionsType, GetOrdersConfigType, GetOrdersResultType, GetAccountStateOptionsType, AccountReportsType, AccountInfoType, FavouriteProductType, StockType, GetHistoricalOrdersOptionsType, HistoricalOrdersType, GetNewsOptionsType, NewsType, WebSettingsType, WebUserSettingType, ConfigDictionaryType, i18nMessagesType, GetPopularStocksConfigType } from '../types';
+import { CashFoundType, AccountConfigType, GetPorfolioConfigType, AccountDataType, SearchProductOptionsType, SearchProductResultType, OrderType, CreateOrderResultType, IsLoginOptionsType, GetOrdersConfigType, GetOrdersResultType, GetAccountStateOptionsType, AccountReportsType, AccountInfoType, FavouriteProductType, StockType, GetHistoricalOrdersOptionsType, HistoricalOrdersType, GetNewsOptionsType, NewsType, WebSettingsType, WebUserSettingType, ConfigDictionaryType, i18nMessagesType, GetPopularStocksConfigType, GetTransactionsOptionsType, TransactionType } from '../types';
 /**
  * @interface DeGiroClassInterface
  */
@@ -22,6 +22,7 @@ export interface DeGiroClassInterface {
     createOrder(order: OrderType): Promise<CreateOrderResultType>;
     executeOrder(order: OrderType, executeId: string): Promise<String>;
     deleteOrder(orderId: String): Promise<void>;
+    getTransactions(options: GetTransactionsOptionsType): Promise<TransactionType[]>;
     getProductsByIds(ids: string[]): Promise<any[]>;
     getNews(options: GetNewsOptionsType): Promise<NewsType>;
     getWebi18nMessages(lang: string): Promise<i18nMessagesType>;
