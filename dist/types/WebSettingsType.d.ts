@@ -1,31 +1,31 @@
-declare type MarketPageIndex = {
+type MarketPageIndex = {
     closePrice: number;
     country: string;
     name: string;
     vwdId: string;
     id: number;
 };
-declare type MarketPageFuture = {
+type MarketPageFuture = {
     country: string;
     name: string;
     vwdId: string;
     id: number;
 };
-declare type MarketPageCurrency = {
+type MarketPageCurrency = {
     fromCountry: string;
     toCountry: string;
     name: string;
     vwdId: string;
     id: number;
 };
-declare type MarketPageChartIndex = {
+type MarketPageChartIndex = {
     closePrice: number;
     country: string;
     name: string;
     vwdId: string;
     id: number;
 };
-export declare type WebSettingsType = {
+export type WebSettingsType = {
     defaultMarketMoversIndexId: number;
     marketMoversIndexIds: number[];
     marketPageChartIndex: MarketPageChartIndex;

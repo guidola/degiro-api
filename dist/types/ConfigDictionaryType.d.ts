@@ -1,48 +1,48 @@
-export declare type StockCountry = {
+export type StockCountry = {
     id: number;
     country: number;
     indices?: number[];
     exchanges?: number[];
 };
-export declare type BondExchange = {
+export type BondExchange = {
     id: number;
     country: number;
     exchange: number;
     postfix?: string;
 };
-export declare type BondIssuerType = {
+export type BondIssuerType = {
     id: number;
     name: string;
     translation: string;
 };
-export declare type EurexCountry = {
+export type EurexCountry = {
     id: number;
     name: string;
     exchanges: Exchange[];
     underlyingExchangeIds: number[];
 };
-export declare type FutureExchange = {
+export type FutureExchange = {
     id: number;
     name: string;
     eurexCountries?: number[];
 };
-export declare type OptionExchange = {
+export type OptionExchange = {
     id: number;
     name: string;
     exchangeId: number;
     underlyingExchangeIds?: number[];
     eurexCountries?: number[];
 };
-export declare type CombinationExchange = {
+export type CombinationExchange = {
     id: number;
     name: string;
 };
-export declare type CFDExchange = {
+export type CFDExchange = {
     id: number;
     country: number;
     exchange: number;
 };
-export declare type Exchange = {
+export type Exchange = {
     id: number;
     name: string;
     code?: string;
@@ -51,42 +51,42 @@ export declare type Exchange = {
     city?: string;
     micCode?: string;
 };
-export declare type Index = {
+export type Index = {
     id: number;
     name: string;
     productId?: number;
 };
-export declare type Region = {
+export type Region = {
     id: number;
     name: string;
     translation: string;
 };
-export declare type Country = {
+export type Country = {
     id: number;
     name: string;
     translation: string;
     region: number;
 };
-declare type ProductTypes = {
+type ProductTypes = {
     id: number;
     name: string;
     translation: string;
     briefTranslation: string;
     contractType: string;
 };
-declare type FeeType = {
+type FeeType = {
     id: number;
     name: string;
     translation: string;
 };
-declare type AggregateListItem = {
+type AggregateListItem = {
     id: string;
     name: string;
 };
-declare type SortListItem = {
+type SortListItem = {
     id: string;
 };
-export declare type ConfigDictionaryType = {
+export type ConfigDictionaryType = {
     stockCountries: StockCountry[];
     bondExchanges: BondExchange[];
     bondIssuerTypes: BondIssuerType[];

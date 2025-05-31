@@ -1,4 +1,4 @@
-export declare type LoginRequestBodyType = {
+export type LoginRequestBodyType = {
     isPassCodeReset: boolean;
     isRedirectToMobile: boolean;
     password: string;

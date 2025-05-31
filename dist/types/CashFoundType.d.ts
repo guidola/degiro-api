@@ -1,4 +1,4 @@
-export declare type CashFoundType = {
+export type CashFoundType = {
     id: string;
     currencyCode: string;
     value: number;

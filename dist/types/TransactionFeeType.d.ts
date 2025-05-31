@@ -1,4 +1,4 @@
-export declare type TransactionFeeType = {
+export type TransactionFeeType = {
     amount: Number;
     currency: String;
     id: Number;

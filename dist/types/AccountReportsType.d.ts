@@ -1,9 +1,9 @@
-export declare type ReportType = {
+export type ReportType = {
     id: number;
     type: string;
     description: string;
     stampCreated: string;
     uri: string;
 };
-export declare type AccountReportsType = ReportType[];
+export type AccountReportsType = ReportType[];
 //# sourceMappingURL=AccountReportsType.d.ts.map

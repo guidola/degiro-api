@@ -1,4 +1,4 @@
-export declare type AccountDataType = {
+export type AccountDataType = {
     data: {
         address: {
             city: string;

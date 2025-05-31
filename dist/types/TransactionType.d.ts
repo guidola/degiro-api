@@ -1,4 +1,4 @@
-export declare type TransactionType = {
+export type TransactionType = {
     buysell: string;
     counterParty: string;
     date: string;

@@ -1,4 +1,4 @@
-export declare type LoginResponseType = {
+export type LoginResponseType = {
     isPassCodeEnabled?: boolean;
     locale?: string;
     redirectUrl?: string;

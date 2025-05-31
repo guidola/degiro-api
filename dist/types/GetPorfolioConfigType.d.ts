@@ -1,5 +1,5 @@
 import { PORTFOLIO_POSITIONS_TYPE_ENUM } from '../enums/DeGiroEnums';
-export declare type GetPorfolioConfigType = {
+export type GetPorfolioConfigType = {
     type: PORTFOLIO_POSITIONS_TYPE_ENUM;
     getProductDetails?: boolean;
 };

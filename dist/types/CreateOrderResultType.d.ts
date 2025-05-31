@@ -1,5 +1,5 @@
 import { TransactionFeeType } from '.';
-export declare type CreateOrderResultType = {
+export type CreateOrderResultType = {
     confirmationId: String;
     freeSpaceNew: Number;
     transactionFees: [TransactionFeeType];

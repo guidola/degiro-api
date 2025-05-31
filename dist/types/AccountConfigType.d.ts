@@ -1,4 +1,4 @@
-export declare type AccountConfigType = {
+export type AccountConfigType = {
     data: {
         betaLandingPath: string;
         cashSolutionsUrl?: string;

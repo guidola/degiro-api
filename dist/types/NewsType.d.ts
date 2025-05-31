@@ -1,4 +1,4 @@
-export declare type New = {
+export type New = {
     brief: string;
     category: string;
     content: string;
@@ -11,12 +11,12 @@ export declare type New = {
     source: string;
     title: string;
 };
-declare type NewsResponse = {
+type NewsResponse = {
     offset?: number;
     total?: number;
     items: New[];
 };
-export declare type NewsType = {
+export type NewsType = {
     latest: NewsResponse;
     top: NewsResponse;
 };

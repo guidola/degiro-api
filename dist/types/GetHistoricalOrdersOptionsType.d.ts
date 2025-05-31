@@ -1,2 +1,2 @@
-export declare type GetHistoricalOrdersOptionsType = {};
+export type GetHistoricalOrdersOptionsType = {};
 //# sourceMappingURL=GetHistoricalOrdersOptionsType.d.ts.map

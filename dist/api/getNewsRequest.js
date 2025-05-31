@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,7 +25,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -35,34 +46,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNewsRequest = void 0;
+var node_fetch_1 = __importDefault(require("node-fetch"));
+var https_proxy_agent_1 = require("https-proxy-agent");
 // Import paths
 var enums_1 = require("../enums");
 var GET_LATESTS_NEWS_PATH = enums_1.DEGIRO_API_PATHS.GET_LATESTS_NEWS_PATH, GET_TOP_NEWS_PATH = enums_1.DEGIRO_API_PATHS.GET_TOP_NEWS_PATH;
 function getNewsRequest(options, accountData, accountConfig) {
     var _this = this;
     return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-        var latest, top, _a, latestOffset, _b, latestLimit, _c, languages, params, requestOptions, latestNewsURI, topNewsURI, result, latestFetch, data, latestFetch, data, error_1;
+        var latest, top, _a, latestOffset, _b, latestLimit, _c, languages, params, baseRequestOptions, finalRequestOptions, proxyUrl, agent, latestNewsURI, topNewsURI, result, latestFetch, data, latestFetch, data, error_1;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     latest = options.latest, top = options.top, _a = options.latestOffset, latestOffset = _a === void 0 ? 0 : _a, _b = options.latestLimit, latestLimit = _b === void 0 ? 20 : _b, _c = options.languages, languages = _c === void 0 ? 'es' : _c;
                     params = '';
-                    params += "offset=" + latestOffset + "&";
-                    params += "limit=" + latestLimit + "&";
-                    params += "languages=" + languages + "&";
-                    params += "intAccount=" + accountData.data.intAccount + "&";
-                    params += "sessionId=" + accountConfig.data.sessionId;
-                    requestOptions = {
+                    params += "offset=".concat(latestOffset, "&");
+                    params += "limit=".concat(latestLimit, "&");
+                    params += "languages=".concat(languages, "&");
+                    params += "intAccount=".concat(accountData.data.intAccount, "&");
+                    params += "sessionId=".concat(accountConfig.data.sessionId);
+                    baseRequestOptions = {
                         headers: {
-                            Cookie: "JSESSIONID=" + accountConfig.data.sessionId + ";",
+                            Cookie: "JSESSIONID=".concat(accountConfig.data.sessionId, ";"),
+                            Referer: 'https://trader.degiro.nl/trader/',
                         },
-                        credentials: 'include',
-                        referer: 'https://trader.degiro.nl/trader/',
                     };
-                    latestNewsURI = "" + accountConfig.data.companiesServiceUrl + GET_LATESTS_NEWS_PATH + "?" + params;
-                    topNewsURI = "" + accountConfig.data.companiesServiceUrl + GET_TOP_NEWS_PATH + "?" + params;
+                    finalRequestOptions = __assign({}, baseRequestOptions);
+                    proxyUrl = process.env.HTTP_PROXY;
+                    if (proxyUrl) {
+                        agent = new https_proxy_agent_1.HttpsProxyAgent(proxyUrl);
+                        finalRequestOptions = __assign(__assign({}, finalRequestOptions), { agent: agent });
+                    }
+                    latestNewsURI = "".concat(accountConfig.data.companiesServiceUrl).concat(GET_LATESTS_NEWS_PATH, "?").concat(params);
+                    topNewsURI = "".concat(accountConfig.data.companiesServiceUrl).concat(GET_TOP_NEWS_PATH, "?").concat(params);
                     result = {
                         latest: {
                             items: [],
@@ -75,7 +96,7 @@ function getNewsRequest(options, accountData, accountConfig) {
                 case 1:
                     _d.trys.push([1, 8, , 9]);
                     if (!latest) return [3 /*break*/, 4];
-                    return [4 /*yield*/, fetch(latestNewsURI, requestOptions)];
+                    return [4 /*yield*/, (0, node_fetch_1.default)(latestNewsURI, finalRequestOptions)];
                 case 2:
                     latestFetch = _d.sent();
                     return [4 /*yield*/, latestFetch.json()];
@@ -85,7 +106,7 @@ function getNewsRequest(options, accountData, accountConfig) {
                     _d.label = 4;
                 case 4:
                     if (!top) return [3 /*break*/, 7];
-                    return [4 /*yield*/, fetch(topNewsURI, requestOptions)];
+                    return [4 /*yield*/, (0, node_fetch_1.default)(topNewsURI, finalRequestOptions)];
                 case 5:
                     latestFetch = _d.sent();
                     return [4 /*yield*/, latestFetch.json()];

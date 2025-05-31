@@ -1,4 +1,4 @@
-export declare type SearchProductResultType = {
+export type SearchProductResultType = {
     id: string;
     name: string;
     isin: string;

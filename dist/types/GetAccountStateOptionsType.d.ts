@@ -1,4 +1,4 @@
-export declare type GetAccountStateOptionsType = {
+export type GetAccountStateOptionsType = {
     from: string;
     to: string;
 };

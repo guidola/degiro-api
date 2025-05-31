@@ -1,4 +1,4 @@
-export declare type GetOrdersConfigType = {
+export type GetOrdersConfigType = {
     active?: boolean;
     lastTransactions?: boolean;
 };

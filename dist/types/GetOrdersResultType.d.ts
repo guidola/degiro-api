@@ -1,4 +1,4 @@
-export declare type GetOrdersResultType = {
+export type GetOrdersResultType = {
     orders: [];
     lastTransactions: [];
 };

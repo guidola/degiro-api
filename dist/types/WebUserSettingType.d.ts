@@ -1,4 +1,4 @@
-export declare type WebUserSettingType = {
+export type WebUserSettingType = {
     desktop: {
         hasClosedFeedbackPromotion: boolean;
         hasSeenProductTour: boolean;

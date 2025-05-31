@@ -1,4 +1,4 @@
-export declare type GetPopularStocksConfigType = {
+export type GetPopularStocksConfigType = {
     popularOnly?: boolean;
     requireTotal?: boolean;
     offset?: number;

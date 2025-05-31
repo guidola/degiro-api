@@ -1,5 +1,5 @@
 import { CashFoundType } from '../types';
-declare type ObjectDataType = {
+type ObjectDataType = {
     value: [];
 };
 export declare const processGetCashFundsResultListObject: (objectData: ObjectDataType) => CashFoundType;

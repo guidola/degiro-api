@@ -1,5 +1,5 @@
 import { DeGiroProducTypes } from '../enums/DeGiroEnums';
-export declare type SearchProductOptionsType = {
+export type SearchProductOptionsType = {
     text: string;
     type?: DeGiroProducTypes | undefined;
     sortColumn?: string;

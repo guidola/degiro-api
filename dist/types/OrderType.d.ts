@@ -1,5 +1,5 @@
 import { DeGiroActions, DeGiroMarketOrderTypes, DeGiroTimeTypes } from '../enums/DeGiroEnums';
-export declare type OrderType = {
+export type OrderType = {
     buySell: DeGiroActions;
     orderType: DeGiroMarketOrderTypes;
     price?: Number;

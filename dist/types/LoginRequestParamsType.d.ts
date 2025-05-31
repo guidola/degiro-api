@@ -1,4 +1,4 @@
-export declare type LoginRequestParamsType = {
+export type LoginRequestParamsType = {
     username: string;
     pwd: string;
     oneTimePassword: string | undefined;

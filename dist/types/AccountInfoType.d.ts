@@ -1,4 +1,4 @@
-export declare type AccountInfoType = {
+export type AccountInfoType = {
     baseCurrency: string;
     cashFunds: AccountInfoCashFunds;
     clientId: number;
@@ -6,15 +6,15 @@ export declare type AccountInfoType = {
     currencyPairs: AccountInfoCurrencyPairs;
     marginType: string;
 };
-declare type CashFund = {
+type CashFund = {
     id: number;
     name: string;
     productIds: number[];
 };
-declare type AccountInfoCashFunds = {
+type AccountInfoCashFunds = {
     [key: string]: CashFund[];
 };
-declare type AccountInfoCurrencyPairs = {
+type AccountInfoCurrencyPairs = {
     [key: string]: {
         id: number;
         price: string;

@@ -1,4 +1,4 @@
-export declare type PortfolioPositionType = {
+export type PortfolioPositionType = {
     foo?: string;
 };
 //# sourceMappingURL=PortfolioPositionType.d.ts.map

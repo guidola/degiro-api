@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.processGetOrdersResultListObject = void 0;
-exports.processGetOrdersResultListObject = function (objectData) {
+var processGetOrdersResultListObject = function (objectData) {
     var _a;
     var arrayDataToExtract = objectData.value;
     var result = {};
@@ -15,4 +15,5 @@ exports.processGetOrdersResultListObject = function (objectData) {
     }
     return result;
 };
+exports.processGetOrdersResultListObject = processGetOrdersResultListObject;
 //# sourceMappingURL=processGetOrdersResultListObject.js.map

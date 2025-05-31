@@ -1,2 +1,2 @@
-export declare type FavouriteProductType = {};
+export type FavouriteProductType = {};
 //# sourceMappingURL=FavouriteProductType.d.ts.map

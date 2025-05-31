@@ -1,4 +1,4 @@
-export declare type DeGiroSettupType = {
+export type DeGiroSettupType = {
     username?: string;
     pwd?: string;
     oneTimePassword?: string;

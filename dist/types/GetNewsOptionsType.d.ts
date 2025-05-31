@@ -1,4 +1,4 @@
-export declare type GetNewsOptionsType = {
+export type GetNewsOptionsType = {
     latest?: boolean;
     top?: boolean;
     latestOffset?: number;

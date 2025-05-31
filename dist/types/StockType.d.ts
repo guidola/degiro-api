@@ -1,4 +1,4 @@
-export declare type StockType = {
+export type StockType = {
     id: string;
     name: string;
     isin: string;
