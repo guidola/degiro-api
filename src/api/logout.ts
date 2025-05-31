@@ -13,7 +13,11 @@ import { debug } from '../utils'
 export function logoutRequest(accountData: AccountDataType, accountConfig: AccountConfigType): Promise<void> {
   return new Promise((resolve, reject) => {
 
-    const baseRequestOptions: RequestInit = {}; // Add any common headers if needed, like in other files
+    const baseRequestOptions: RequestInit = {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+      }
+    };
     let finalRequestOptions = { ...baseRequestOptions };
 
     const proxyUrl = process.env.HTTP_PROXY;

@@ -24,7 +24,11 @@ var BASE_API_URL = enums_1.DEGIRO_API_PATHS.BASE_API_URL, LOGOUT_URL_PATH = enum
 var utils_1 = require("../utils");
 function logoutRequest(accountData, accountConfig) {
     return new Promise(function (resolve, reject) {
-        var baseRequestOptions = {}; // Add any common headers if needed, like in other files
+        var baseRequestOptions = {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+            }
+        };
         var finalRequestOptions = __assign({}, baseRequestOptions);
         var proxyUrl = process.env.HTTP_PROXY;
         if (proxyUrl) {

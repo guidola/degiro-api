@@ -27,7 +27,11 @@ export function searchProductRequest(options: SearchProductOptionsType, accountD
     // Preparae de request
     const params = createURLQuery(options)
 
-    const baseRequestOptions: RequestInit = {}; // Add any common headers if needed
+    const baseRequestOptions: RequestInit = {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+      }
+    };
     let finalRequestOptions = { ...baseRequestOptions };
 
     const proxyUrl = process.env.HTTP_PROXY;

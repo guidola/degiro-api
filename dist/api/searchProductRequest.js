@@ -40,7 +40,11 @@ function searchProductRequest(options, accountData, accountConfig) {
     return new Promise(function (resolve, reject) {
         // Preparae de request
         var params = createURLQuery(options);
-        var baseRequestOptions = {}; // Add any common headers if needed
+        var baseRequestOptions = {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+            }
+        };
         var finalRequestOptions = __assign({}, baseRequestOptions);
         var proxyUrl = process.env.HTTP_PROXY;
         if (proxyUrl) {

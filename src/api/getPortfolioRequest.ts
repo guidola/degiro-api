@@ -12,7 +12,11 @@ export function getPortfolioRequest(accountData: AccountDataType, accountConfig:
     // Create params to reach portfolio
     const params = '&portfolio=0'
 
-    const baseRequestOptions: RequestInit = {}; // Add any common headers if needed
+    const baseRequestOptions: RequestInit = {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+      }
+    };
     let finalRequestOptions = { ...baseRequestOptions };
 
     const proxyUrl = process.env.HTTP_PROXY;
