@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { AccountConfigType, AccountDataType, StockType, GetPopularStocksConfigType } from '../types'
 
@@ -13,20 +15,19 @@ export function getPopularStocksRequest(accountData: AccountDataType, accountCon
   return new Promise((resolve, reject) => {
 
     // Create fetch request options
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers: {
-        [key: string]: string,
-      },
-      credentials: 'include',
-      referer: string,
-    } = {
+    const baseRequestOptions: RequestInit = {
       headers: {
         Cookie: `JSESSIONID=${accountConfig.data.sessionId};`,
+        Referer: 'https://trader.degiro.nl/trader/',
       },
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
     // Create params to reach popular stocks
@@ -41,8 +42,8 @@ export function getPopularStocksRequest(accountData: AccountDataType, accountCon
 
     // Do the request to get a account config data
     const url = `${accountConfig.data.productSearchUrl}${STOCKS_SEARCH_PATH}?${params}`
-    debug(`Making request to ${url} with params: \n${requestOptions}`)
-    fetch(url, requestOptions)
+    debug(`Making request to ${url} with params: \n${finalRequestOptions}`)
+    fetch(url, finalRequestOptions)
       .then(res => res.json())
       .then((res) => {
         resolve(res.products)

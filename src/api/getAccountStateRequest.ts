@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { AccountConfigType, AccountDataType, GetAccountStateOptionsType } from '../types'
 
@@ -17,26 +19,25 @@ export function getAccountStateRequest(accountData: AccountDataType, accountConf
     params += `intAccount=${accountData.data.intAccount}&`
     params += `sessionId=${accountConfig.data.sessionId}`
 
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers: {
-        [key: string]: string,
-      },
-      credentials: 'include',
-      referer: string,
-    } = {
+    const baseRequestOptions: RequestInit = {
       headers: {
         Cookie: `JSESSIONID=${accountConfig.data.sessionId};`,
+        Referer: 'https://trader.degiro.nl/trader/',
       },
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
     // Do the request to get a account config data
     const uri = `${accountConfig.data.reportingUrl}${GET_ACCOUNT_STATE_PATH}?${params}`
     debug(`Making request to ${uri}`)
-    fetch(uri, requestOptions)
+    fetch(uri, finalRequestOptions)
       .then(res => res.json())
       .then((res) => {
         if (!res.data || !res.data.cashMovements || !Array.isArray(res.data.cashMovements)) return reject('DeGiro response does not match with know scheme')

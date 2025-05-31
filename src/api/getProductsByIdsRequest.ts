@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { AccountConfigType, AccountDataType } from '../types'
 
@@ -8,25 +10,24 @@ import { debug } from '../utils'
 export function getProductsByIdsRequest(ids: string[], accountData: AccountDataType, accountConfig: AccountConfigType): Promise<any[]> {
   return new Promise((resolve, reject) => {
 
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers: {
-        [key: string]: string,
-      },
-      credentials: 'include',
-      referer: string,
-    } = {
+    const baseRequestOptions: RequestInit = {
       method: 'POST',
       body: JSON.stringify(ids.map(id => id.toString())),
       headers: {
         'Content-Type': 'application/json',
+        Referer: 'https://trader.degiro.nl/trader/',
       },
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
-    fetch(`${accountConfig.data.productSearchUrl}v5/products/info?intAccount=${accountData.data.intAccount}&sessionId=${accountConfig.data.sessionId}`, requestOptions)
+    fetch(`${accountConfig.data.productSearchUrl}v5/products/info?intAccount=${accountData.data.intAccount}&sessionId=${accountConfig.data.sessionId}`, finalRequestOptions)
       .then(res => res.json())
       .then(res => resolve(res.data))
       .catch(reject)

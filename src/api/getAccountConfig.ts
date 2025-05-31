@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { AccountConfigType } from '../types'
 
@@ -11,25 +13,24 @@ import { debug } from '../utils'
 export function getAccountConfigRequest(sessionId: string): Promise<AccountConfigType> {
   return new Promise((resolve, reject) => {
 
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers: {
-        [key: string]: string,
-      },
-      credentials: 'include',
-      referer: string,
-    } = {
+    const baseRequestOptions: RequestInit = {
       headers: {
         Cookie: `JSESSIONID=${sessionId};`,
+        Referer: 'https://trader.degiro.nl/trader/',
       },
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
     // Do the request to get a account config data
     debug(`Making request to ${BASE_API_URL}${GET_ACCOUNT_CONFIG_PATH} with JSESSIONID: ${sessionId}`)
-    fetch(BASE_API_URL + GET_ACCOUNT_CONFIG_PATH, requestOptions)
+    fetch(BASE_API_URL + GET_ACCOUNT_CONFIG_PATH, finalRequestOptions)
       .then((res) => {
         if (!res.ok) { reject(res.statusText) }
         return res.json()

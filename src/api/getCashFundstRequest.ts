@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { AccountConfigType, AccountDataType, CashFoundType } from '../types'
 
@@ -14,26 +16,25 @@ export function getCashFundstRequest(accountData: AccountDataType, accountConfig
     params += 'cashFunds=0&'
     params += 'limit=100'
 
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers: {
-        [key: string]: string,
-      },
-      credentials: 'include',
-      referer: string,
-    } = {
+    const baseRequestOptions: RequestInit = {
       headers: {
         Cookie: `JSESSIONID=${accountConfig.data.sessionId};`,
+        Referer: 'https://trader.degiro.nl/trader/',
       },
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
     // Do the request to get a account config data
     const uri = `${accountConfig.data.tradingUrl}${GET_GENERIC_DATA_PATH}${accountData.data.intAccount};jsessionid=${accountConfig.data.sessionId}?${params}`
     debug(`Making request to ${uri}`)
-    fetch(uri, requestOptions)
+    fetch(uri, finalRequestOptions)
       .then(res => res.json())
       .then((res) => {
         if (!res.cashFunds || !res.cashFunds.value || !Array.isArray(res.cashFunds.value)) {

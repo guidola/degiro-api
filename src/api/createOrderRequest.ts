@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { OrderType, AccountDataType, AccountConfigType, CreateOrderResultType } from '../types'
 
@@ -11,27 +13,26 @@ import { debug } from '../utils'
 export function createOrderRequest(order: OrderType, accountData: AccountDataType, accountConfig: AccountConfigType): Promise<CreateOrderResultType> {
   return new Promise((resolve, reject) => {
 
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers: {
-        [key: string]: string,
-      },
-      credentials: 'include',
-      referer: string,
-    } = {
+    const baseRequestOptions: RequestInit = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
+        Referer: 'https://trader.degiro.nl/trader/',
       },
       body: JSON.stringify(order),
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
     const uri = `${accountConfig.data.tradingUrl}${CREATE_ORDER_PATH};jsessionid=${accountConfig.data.sessionId}?intAccount=${accountData.data.intAccount}&sessionId=${accountConfig.data.sessionId}`
-    debug(uri, requestOptions)
-    fetch(uri, requestOptions)
+    debug(uri, finalRequestOptions)
+    fetch(uri, finalRequestOptions)
       .then(res => res.json())
       .then((res) => {
         if (res.errors) return reject(res.errors)

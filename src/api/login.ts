@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { LoginRequestParamsType, LoginRequestBodyType, LoginResponseType } from '../types'
 
@@ -23,32 +25,31 @@ export function loginRequest(params: LoginRequestParamsType): Promise<LoginRespo
       },
     }
 
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers: {
-        [key: string]: string,
-      },
-      credentials: 'include',
-      referer: string,
-    } = {
+    const baseRequestOptions: RequestInit = {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: {
         'Content-Type': 'application/json',
+        Referer: 'https://trader.degiro.nl/trader/',
       },
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
     // Do the request to get a session
     debug(`Making request to ${BASE_API_URL}${LOGIN_URL_PATH} with options:`)
-    debug(JSON.stringify(requestOptions, null, 2))
-    fetch(`${BASE_API_URL}${LOGIN_URL_PATH}`, requestOptions)
+    debug(JSON.stringify(finalRequestOptions, null, 2))
+    fetch(`${BASE_API_URL}${LOGIN_URL_PATH}`, finalRequestOptions)
       .then((res) => {
         if (!payload.oneTimePassword) return res
         debug('Sending OTP')
-        return fetch(`${BASE_API_URL}${LOGIN_URL_PATH}/totp`, requestOptions);
+        return fetch(`${BASE_API_URL}${LOGIN_URL_PATH}/totp`, finalRequestOptions);
       })
       .then(res => res.json())
       .then((res) => {

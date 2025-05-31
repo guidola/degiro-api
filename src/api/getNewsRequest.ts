@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { AccountConfigType, AccountDataType, i18nMessagesType, GetNewsOptionsType, NewsType } from '../types'
 
@@ -21,20 +23,19 @@ export function getNewsRequest(options: GetNewsOptionsType, accountData: Account
     params += `sessionId=${accountConfig.data.sessionId}`
 
     // Generate Request options
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers: {
-        [key: string]: string,
-      },
-      credentials: 'include',
-      referer: string,
-    } = {
+    const baseRequestOptions: RequestInit = {
       headers: {
         Cookie: `JSESSIONID=${accountConfig.data.sessionId};`,
+        Referer: 'https://trader.degiro.nl/trader/',
       },
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
     // Generate de request URIs
@@ -56,14 +57,14 @@ export function getNewsRequest(options: GetNewsOptionsType, accountData: Account
 
       // Check if latest requested
       if (latest) {
-        const latestFetch = await fetch(latestNewsURI, requestOptions)
+        const latestFetch = await fetch(latestNewsURI, finalRequestOptions)
         const { data } = await latestFetch.json()
         result.latest = data
       }
 
       // Check if top requested
       if (top) {
-        const latestFetch = await fetch(topNewsURI, requestOptions)
+        const latestFetch = await fetch(topNewsURI, finalRequestOptions)
         const { data } = await latestFetch.json()
         result.top = data
       }

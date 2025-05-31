@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { AccountConfigType, AccountDataType, GetOrdersConfigType, GetOrdersResultType } from '../types'
 
@@ -15,26 +17,29 @@ export function getOrdersRequest(accountData: AccountDataType, accountConfig: Ac
     if (active) params += `${GET_ORDERS_TYPES.ACTIVE}=0&`
     if (lastTransactions) params += `${GET_ORDERS_TYPES.TRANSACTIONS}=0&`
 
-    const requestOptions: {
-      method?: string,
-      body?: string,
-      headers?: any,
-      credentials: 'include',
-      referer: string,
-    } = {
-      credentials: 'include',
-      referer: 'https://trader.degiro.nl/trader/',
+    const baseRequestOptions: RequestInit = {
+      headers: {
+        Referer: 'https://trader.degiro.nl/trader/',
+      }
+    };
+
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
     }
 
     // Do the request to get a account config data
     const uri = `${accountConfig.data.tradingUrl}v5/update/${accountData.data.intAccount};jsessionid=${accountConfig.data.sessionId}?${params}`
     debug(`Making request to ${uri}`)
-    fetch(uri, requestOptions)
+    fetch(uri, finalRequestOptions)
       .then(res => res.json())
       .then((res) => {
         const result: GetOrdersResultType = {
-          orders: res.orders ? res.orders.value.map(processGetOrdersResultListObject) : [],
-          lastTransactions: res.transactions ? res.transactions.value.map(processGetOrdersResultListObject) : [],
+          orders: res.orders ? res.orders.value.map(processGetOrdersResultListObject) : [],
+          lastTransactions: res.transactions ? res.transactions.value.map(processGetOrdersResultListObject) : [],
         }
         resolve(result)
       })

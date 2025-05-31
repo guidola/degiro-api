@@ -1,3 +1,5 @@
+import fetch, { RequestInit } from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 // Import types
 import { SearchProductOptionsType, AccountConfigType, AccountDataType, SearchProductResultType } from '../types'
 
@@ -25,11 +27,20 @@ export function searchProductRequest(options: SearchProductOptionsType, accountD
     // Preparae de request
     const params = createURLQuery(options)
 
+    const baseRequestOptions: RequestInit = {}; // Add any common headers if needed
+    let finalRequestOptions = { ...baseRequestOptions };
+
+    const proxyUrl = process.env.HTTP_PROXY;
+    if (proxyUrl) {
+      const agent = new HttpsProxyAgent(proxyUrl);
+      finalRequestOptions = { ...finalRequestOptions, agent };
+    }
+
     // Do de request
     debug(`Making a search request to url: ${accountConfig.data.productSearchUrl}v5/products/lookup?intAccount=${accountData.data.intAccount}&sessionId=${accountData.data.id}&${params}}`)
-    fetch(`${accountConfig.data.productSearchUrl}v5/products/lookup?intAccount=${accountData.data.intAccount}&sessionId=${accountConfig.data.sessionId}&${params}`)
+    fetch(`${accountConfig.data.productSearchUrl}v5/products/lookup?intAccount=${accountData.data.intAccount}&sessionId=${accountConfig.data.sessionId}&${params}`, finalRequestOptions)
       .then(res => res.json())
-      .then(({ products }) => resolve(products || []))
+      .then(({ products }) => resolve(products || []))
       .catch(reject)
   })
 }
