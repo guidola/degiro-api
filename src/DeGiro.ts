@@ -35,6 +35,7 @@ import {
   GetPopularStocksConfigType,
   GetTransactionsOptionsType,
   TransactionType,
+  ProductDetailsType,
 } from './types'
 
 // Import requests
@@ -325,7 +326,7 @@ export class DeGiro implements DeGiroClassInterface {
 
   /* Miscellaneous methods */
 
-  getProductsByIds(ids: string[]): Promise<any[]> {
+  getProductsByIds(ids: string[]): Promise<ProductDetailsType[]> {
     if (!this.hasSessionId()) {
       return Promise.reject('You must log in first')
     }

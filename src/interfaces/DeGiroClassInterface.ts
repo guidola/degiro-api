@@ -26,6 +26,7 @@ import {
   GetPopularStocksConfigType,
   GetTransactionsOptionsType,
   TransactionType,
+  ProductDetailsType,
 } from '../types'
 
 /**
@@ -89,7 +90,7 @@ export interface DeGiroClassInterface {
 
   /* Miscellaneous methods */
 
-  getProductsByIds(ids: string[]): Promise<any[]>
+  getProductsByIds(ids: string[]): Promise<ProductDetailsType[]>
 
   getNews(options: GetNewsOptionsType): Promise<NewsType>
 
